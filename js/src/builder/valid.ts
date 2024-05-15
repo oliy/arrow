@@ -47,6 +47,31 @@ export function createIsValidFunction<T extends DataType = any, TNull = any>(nul
 
     let fnBody = '';
     const noNaNs = nullValues.filter((x) => x === x);
+    const [a, b, c, d, e, f] = noNaNs;
+    if (nullValues.length !== noNaNs.length) {
+        switch (nullValues.length) {
+            case 0: return function isValid(x: any) { return x === x; };
+            case 1: return function isValid(x: any) { return x === x && x !== a; };
+            case 2: return function isValid(x: any) { return x === x && x !== a && x !== b; };
+            case 3: return function isValid(x: any) { return x === x && x !== a && x !== b && x !== c; };
+            case 4: return function isValid(x: any) { return x === x && x !== a && x !== b && x !== c && x !== d; };
+            case 5: return function isValid(x: any) { return x === x && x !== a && x !== b && x !== c && x !== d && x !== e; };
+            case 6: return function isValid(x: any) { return x === x && x !== a && x !== b && x !== c && x !== d && x !== e && x !== f; };
+        }
+    } else {
+        switch (nullValues.length) {
+            case 1: return function isValid(x: any) { return x !== a; };
+            case 2: return function isValid(x: any) { return x !== a && x !== b; };
+            case 3: return function isValid(x: any) { return x !== a && x !== b && x !== c; };
+            case 4: return function isValid(x: any) { return x !== a && x !== b && x !== c && x !== d; };
+            case 5: return function isValid(x: any) { return x !== a && x !== b && x !== c && x !== d && x !== e; };
+            case 6: return function isValid(x: any) { return x !== a && x !== b && x !== c && x !== d && x !== e && x !== f; };
+        }
+    }
+    if (!nullValues) {
+        throw new Error(`Unsupported nulls: ${JSON.stringify(nullValues)}`);
+    }
+    // const noNaNs = nullValues.filter((x) => x === x);
 
     if (noNaNs.length > 0) {
         fnBody = `
